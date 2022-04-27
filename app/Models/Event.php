@@ -9,6 +9,9 @@ class Event extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['id', 'provider', 'article_id'];
+
+
     public function article() {
         return $this->belongsTo(Article::class);
     }

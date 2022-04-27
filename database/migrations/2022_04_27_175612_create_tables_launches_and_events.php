@@ -14,14 +14,14 @@ return new class extends Migration
     public function up()
     {
         Schema::create('launches', function (Blueprint $table) {
-            $table->id();
+            $table->string('id');
             $table->string('provider');
             $table->foreignId('article_id')->references('id')->on('articles')->onDelete('cascade');
             $table->timestamps();
         });
 
         Schema::create('events', function (Blueprint $table) {
-            $table->id();
+            $table->string('id');
             $table->string('provider');
             $table->foreignId('article_id')->references('id')->on('articles')->onDelete('cascade');
             $table->timestamps();
