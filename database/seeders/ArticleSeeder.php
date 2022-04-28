@@ -17,23 +17,39 @@ class ArticleSeeder extends Seeder
      */
     public function run()
     {
-        $json = json_decode(file_get_contents('https://api.spaceflightnewsapi.net/v3/articles'), true);
 
+        $get_current_count = json_decode(file_get_contents('https://api.spaceflightnewsapi.net/v3/articles/count'), true);
+        $raw_articles = json_decode(file_get_contents('https://api.spaceflightnewsapi.net/v3/articles?_limit=' . $get_current_count), true);
 
+        $chunked_array = array_chunk($raw_articles, 4000);
 
-        array_map(function ($article) {
-            $newArticle = Article::create(['id' => $article['id'], 'featured' => $article['featured'], 'title' => $article['title'], 'url' => $article['url'], 'imageUrl' => $article['imageUrl'], 'newsSite' => $article['newsSite'], 'summary' => $article['summary'], 'publishedAt' => $article['publishedAt']]);
-            $launches = $article['launches'];
-            $events = $article['events'];
-
-            foreach ($launches as $launch) {
-             Launch::create(['id' => $launch['id'], 'provider' => $launch['provider'], 'article_id' => $article['id']]);
+        foreach($chunked_array as $chunk) {   
+        $articles = array();
+        $launches = array();
+        $events = array();
+        
+        foreach($chunk as $raw_article) {
+            $article = ['id' => $raw_article['id'], 'featured' => $raw_article['featured'], 'title' => $raw_article['title'], 'url' => $raw_article['url'], 'imageUrl' => $raw_article['imageUrl'], 'newsSite' => $raw_article['newsSite'], 'summary' => $raw_article['summary'], 'publishedAt' => $raw_article['publishedAt']];
+            array_push($articles, $article);
+            $raw_launches = $raw_article['launches'];
+            $raw_events = $raw_article['events'];
+            if (sizeof($raw_launches) > 0) {
+                foreach ($raw_launches as $raw_launch) {
+                    $launch = ['id' => $raw_launch['id'], 'provider' => $raw_launch['provider'], 'article_id' => $raw_article['id']];
+                    array_push($launches, $launch);
+                }
             }
-            foreach ($events as $event) {
-             Event::create(['id' => $event['id'], 'provider' => $event['provider'], 'article_id' => $article['id']]);
-         }
-
-     }, $json);
-
+            if (sizeof($raw_events) > 0) {
+                foreach ($raw_events as $raw_event) {
+                    $event = ['id' => $raw_event['id'], 'provider' => $raw_event['provider'], 'article_id' => $raw_article['id']];
+                    array_push($events, $event);
+                }
+            }
+        }
+        Article::insert($articles);
+        Launch::insert($launches);
+        Event::insert($events);
     }
+
+}
 }

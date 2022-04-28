@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('newsSite');
             $table->text('summary');
             $table->string('publishedAt');
-            $table->timestamps();
         });
     }
 

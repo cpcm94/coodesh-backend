@@ -17,14 +17,12 @@ return new class extends Migration
             $table->string('id');
             $table->string('provider');
             $table->foreignId('article_id')->references('id')->on('articles')->onDelete('cascade');
-            $table->timestamps();
         });
 
         Schema::create('events', function (Blueprint $table) {
             $table->string('id');
             $table->string('provider');
             $table->foreignId('article_id')->references('id')->on('articles')->onDelete('cascade');
-            $table->timestamps();
         });
     }
 
