@@ -29,7 +29,7 @@ Configuring environment variables in your Heroku app are the same ones required 
 
 Now you need to add and configure the `.env` file. A example env file can be found in the project directory as `.env.example`:
 
-All these informations should be found
+All these informations should be found inside your JawsDB add-on
 
 | Variable      | Description               |
 | ------------- | ------------------------- |
@@ -59,7 +59,6 @@ The command will fetch all articles from the Space Flight News API
 /node_modules
 /public/hot
 /public/storage
-/storage/\*.key
 /vendor
 .env
 .env.backup
