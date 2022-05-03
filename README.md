@@ -44,9 +44,17 @@ All these informations should be found inside your JawsDB add-on
 
 To run the project run php artisan serve.
 
+### Migrations
+
+After setting up your `.env` file, run the following command to execute the necessary migrations:
+
+```
+php artisan migrate
+```
+
 ### Populating your JawsDB
 
-After setting up your `.env` file and starting the project locally, run the following command:
+After setting up your `.env` file, run the following command:
 
 ```
 php artisan db:seed ArticleSeeder
